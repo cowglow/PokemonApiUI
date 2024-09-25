@@ -29,12 +29,11 @@ jobs:
 
       - name: Install dependencies 📦
         run: |
-          corepack enable
-          pnpm install
+          npm install
 
       - name: Build 🛠
         run: |
-          pnpm run build
+          npm run build
 
       - uses: actions/configure-pages@v4
 

@@ -1,0 +1,41 @@
+nam: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      content: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: gh-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@4
+      - uses: actions/setup-node@4
+        with:
+          node-version: 'lts/*'
+      - name: Install Dependencies
+        run: |
+          corepack enable
+          pnpm install
+      - name: Build
+        run: |
+          pnpm run build
+      - uses: actions/configure-pages@4
+      - uses: actions/upload-pages-artifact@3
+        with:
+          path: build
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@4

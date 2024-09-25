@@ -1,4 +1,4 @@
-nam: Deploy
+name: Deploy
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      content: read
+      contents: read
       pages: write
       id-token: write
 

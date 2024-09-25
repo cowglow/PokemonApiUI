@@ -1,12 +1,10 @@
-import {useEffect, useState} from "react";
-import {FormProvider, useForm} from "react-hook-form";
+import {FieldName, FormProvider, useForm} from "react-hook-form";
 import {styled, Typography} from "@mui/material";
-import {StyledTextInput} from "./RHF/FormComponet.Styled.ts";
+import {StyledForm, StyledTextInput} from "./RHF/FormComponet.Styled.ts";
 
 
-const StyledPokemonForm = styled('form')`
-  display: flex;
-  flex-direction: column;
+const StyledPokemonForm = styled(StyledForm)`
+  border: solid greenyellow;
 `;
 
 type PokemonFormSchema = {
@@ -37,9 +35,10 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
         <FormProvider {...methods}>
             <StyledPokemonForm>
             <Typography variant="h4" component="h1">Pokemon:{pokemon}</Typography>
-            {Object.keys({...methods.formState.defaultValues}).map((key) => (
-                <StyledTextInput key={key} {...methods.register(key as any)}/>
-            ))}
+            {Object.keys({...methods.formState.defaultValues}).map((key) => {
+                const fieldName = key as FieldName<PokemonFormSchema>
+                return <StyledTextInput key={key} {...methods.register(fieldName)}/>
+            })}
             </StyledPokemonForm>
         </FormProvider>
     )

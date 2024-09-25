@@ -1,10 +1,10 @@
 import {Paper, styled, Tab, Tabs} from "@mui/material";
 import {useEffect, useState} from "react";
 import PokemonForm from "./components/PokemonForm.tsx";
+import Branding from "./components/Branding.tsx";
 
 const Container = styled(Paper)`
   display: flex;
-  //flex-direction: column;
   height: 100svh;
   gap: ${({theme}) => theme.spacing(2)};
   justify-content: center;
@@ -17,10 +17,9 @@ type PokemonApiResults = { name: string, url: string }[]
 type PokemonData = { url: string, data?: unknown }
 type PokemonCache = Record<string, PokemonData>
 
-function App() {
+export default function App() {
     const [tabIndex, setTabIndex] = useState(0)
     const [formCache, setFormCache] = useState<PokemonCache>({})
-    // const [value, setValue] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -47,10 +46,8 @@ function App() {
                     <Tab key={`pokemon-${index}`} label={label}/>
                 ))}
             </Tabs>
-            {/*<Branding/>*/}
+            <Branding/>
             {selectedPokemon && <PokemonForm key={`form-${selectedPokemon}`} name={selectedPokemon} url={formCache[selectedPokemon].url}/>}
         </Container>
     );
 }
-
-export default App

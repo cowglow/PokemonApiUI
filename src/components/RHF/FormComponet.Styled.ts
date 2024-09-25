@@ -1,7 +1,9 @@
 import {styled, TextField} from "@mui/material";
 
 export const StyledForm = styled('form')`
-  border: solid greenyellow;
+  display: flex;
+  flex-direction: column;
+  gap:${({theme}) => theme.spacing(2) };
   padding: ${({theme}) => `${theme.spacing(2)} ${theme.spacing(1)}`};
 `
 

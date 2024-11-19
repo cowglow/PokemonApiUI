@@ -6,7 +6,10 @@ import {Pokemon} from "../lib/PokemonType.ts";
 
 
 const StyledPokemonForm = styled(StyledForm)`
-    //border: solid greenyellow;
+    width: 100%;
+    @media (min-width: 768px) {
+        width: 600px;
+    }
 `;
 
 const Image = styled('img')`
@@ -52,8 +55,8 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
                     // @ts-ignore
                     return methods.formState.isLoading
                         ? <Skeleton
-                            // width={600}
-                            // height={56}
+                            width="100%"
+                            height={56}
                         />
                         : <StyledTextInput
                             key={key}

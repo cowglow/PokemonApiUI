@@ -10,7 +10,6 @@ const Container = styled(Paper)`
     gap: ${({theme}) => theme.spacing(2)};
     justify-content: center;
     padding: ${({theme}) => theme.spacing(8)};
-    //margin: 0 auto;
 `
 type PokemonApiResponse = { count: number, next: string, previous: string | null, results: PokemonApiResults }
 type PokemonApiResults = { name: string, url: string }[]
@@ -42,8 +41,9 @@ export default function App() {
                     <AddRoundedIcon/>
                 </IconButton>
                 <Tabs
+                    role="navigation"
                     orientation="vertical"
-                    variant="scrollable"
+                    variant="fullWidth"
                     value={tabIndex}
                     onChange={(_, newValue) => setTabIndex(newValue)}
                     aria-label="Pokemon Forms"

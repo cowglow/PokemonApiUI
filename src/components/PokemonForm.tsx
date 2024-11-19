@@ -1,17 +1,17 @@
 import {FieldName, FormProvider, useForm} from "react-hook-form";
-import {Box, capitalize, styled, Typography} from "@mui/material";
+import {Box, capitalize, Skeleton, styled, Typography} from "@mui/material";
 import {StyledForm, StyledTextInput} from "./RHF/FormComponet.Styled.ts";
 import createPokemon from "../lib/create-pokemon.ts";
 import {Pokemon} from "../lib/PokemonType.ts";
 
 
 const StyledPokemonForm = styled(StyledForm)`
-  border: solid greenyellow;
+    //border: solid greenyellow;
 `;
 
 const Image = styled('img')`
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 `
 
 type PokemonFormSchema = Partial<Pokemon>
@@ -21,15 +21,16 @@ type PokemonFormProps = {
     url: string
 }
 export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
+    const editableFields = ["name", "height", "weight", "base_experience"] as const
+    const randomDelay = Math.floor(Math.random() * (1200 - 800 + 1)) + 800;
     const methods = useForm<PokemonFormSchema>({
         defaultValues: async () => {
             const pokemonData = await fetch(url)
             const json = await pokemonData.json()
+            await new Promise(resolve => setTimeout(resolve, randomDelay))
             return createPokemon(json)
         }
     })
-
-    const editableFields = ["name", "height", "weight", "base_experience"]
 
     return (
         <FormProvider {...methods}>
@@ -38,16 +39,30 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
                     <Typography variant="h4" component="h1">
                         {capitalize(pokemon)}
                     </Typography>
-                    <Image src={`${methods.getValues("avatar")}`} alt=""/>
+                    {methods.formState.isLoading
+                        ? <Skeleton
+                            width={96}
+                            height={96}
+                        />
+                        : <Image src={`${methods.getValues("avatar")}`} alt=""/>
+                    }
                 </Box>
-                {editableFields.map((key) => {
+                {editableFields.map((key: FieldName<PokemonFormSchema>) => {
                     const fieldName = key as FieldName<PokemonFormSchema>
                     // @ts-ignore
-                    return <StyledTextInput key={key} label={capitalize(key)} {...methods.register(fieldName)}/>
+                    return methods.formState.isLoading
+                        ? <Skeleton
+                            // width={600}
+                            // height={56}
+                        />
+                        : <StyledTextInput
+                            key={key}
+                            label={capitalize(key)}
+                            // @ts-ignore
+                            {...methods.register(fieldName)}
+                        />
                 })}
             </StyledPokemonForm>
         </FormProvider>
-
-
     );
 };

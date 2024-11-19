@@ -8,5 +8,5 @@ export const StyledForm = styled('form')`
 `
 
 export const StyledTextInput = styled(TextField)`
-  width: ${({theme}) => theme.spacing(75)};
+  // width: ${({theme}) => theme.spacing(75)};
 `

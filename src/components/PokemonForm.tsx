@@ -7,9 +7,8 @@ import {Pokemon} from "../lib/PokemonType.ts";
 
 const StyledPokemonForm = styled(StyledForm)`
     width: 100%;
-    @media (min-width: 768px) {
-        width: 600px;
-    }
+    display: flex;
+    padding: 0 ${({theme}) => theme.spacing(1.73)};
 `;
 
 const Image = styled('img')`
@@ -63,6 +62,7 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
                             label={capitalize(key)}
                             // @ts-ignore
                             {...methods.register(fieldName)}
+
                         />
                 })}
             </StyledPokemonForm>

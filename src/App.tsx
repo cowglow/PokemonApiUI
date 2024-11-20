@@ -1,16 +1,34 @@
-import {Box, IconButton, Paper, styled, Tab, Tabs} from "@mui/material";
+import {Box, Fab, IconButton, Paper, styled, Tab, Tabs} from "@mui/material";
 import {useEffect, useState} from "react";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import PokemonForm from "./components/PokemonForm.tsx";
 import Branding from "./components/Branding.tsx";
 
 const Container = styled(Paper)`
+    width: 100%;
     display: flex;
+    flex-direction: column;
     height: 100svh;
-    gap: ${({theme}) => theme.spacing(2)};
-    justify-content: center;
-    padding: ${({theme}) => theme.spacing(8)};
+    overflow: scroll;
+    align-content: center;
+    padding: 0 ${({theme}) => theme.spacing(8)};
+    @media (max-width: 600px) {
+        padding: 0;
+    }
 `
+
+const StyledBox = styled(Box)`
+    display: flex;
+    width: 800px;
+    height: calc(100% - 78px);
+    margin: 0 auto;
+    @media (max-width: 600px) {
+        flex-direction: column-reverse;
+        width: 100%;
+        gap: ${({theme}) => theme.spacing(1) };
+    }
+`
+
 type PokemonApiResponse = { count: number, next: string, previous: string | null, results: PokemonApiResults }
 type PokemonApiResults = { name: string, url: string }[]
 type PokemonData = { url: string, data?: unknown }
@@ -29,6 +47,9 @@ export default function App() {
                 return ({...acc, [name]: {url}})
             }, {} as PokemonCache)
             setFormCache(formCache)
+            if (pokemonCount > 5) {
+                setTabIndex(pokemonCount - 1)
+            }
         })()
     }, [pokemonCount])
 
@@ -36,27 +57,33 @@ export default function App() {
     return (
         <Container>
             <Branding/>
-            <Box display="flex" flexDirection="column">
-                <IconButton onClick={() => setPokemonCount(prevState => prevState + 1)}>
-                    <AddRoundedIcon/>
-                </IconButton>
+            <StyledBox>
                 <Tabs
                     role="navigation"
                     orientation="vertical"
-                    variant="fullWidth"
+                    variant="scrollable"
+                    visibleScrollbar
                     value={tabIndex}
                     onChange={(_, newValue) => setTabIndex(newValue)}
                     aria-label="Pokemon Forms"
-                    sx={{borderRight: 1, borderColor: 'divider'}}>
+                >
                     {Object.keys(formCache).map((label, index) => (
                         <Tab key={`pokemon-${index}`} label={label}/>
                     ))}
                 </Tabs>
-            </Box>
-            <Box>
-                {selectedPokemon && <PokemonForm key={`form-${selectedPokemon}`} name={selectedPokemon}
-                                                 url={formCache[selectedPokemon].url}/>}
-            </Box>
+                {selectedPokemon && (
+                    <PokemonForm
+                        key={`form-${selectedPokemon}`}
+                        name={selectedPokemon}
+                        url={formCache[selectedPokemon].url}
+                    />
+                )}
+                <Fab color="primary" aria-label="add" size="medium" sx={{position: "absolute", bottom: 33, right: 33}}>
+                    <IconButton sx={{color: "white"}} onClick={() => setPokemonCount(prevState => prevState + 1)}>
+                        <AddRoundedIcon/>
+                    </IconButton>
+                </Fab>
+            </StyledBox>
         </Container>
     );
 }

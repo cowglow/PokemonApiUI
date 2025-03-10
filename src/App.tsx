@@ -3,6 +3,9 @@ import {useEffect, useState} from "react";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import PokemonForm from "./components/PokemonForm.tsx";
 import Branding from "./components/Branding.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchPokemons} from "./redux/actions/fetch-pokemons.ts";
+import {PokemonState} from "./redux/reducers/pokemons.ts";
 
 const Container = styled(Paper)`
     width: 100%;
@@ -25,65 +28,76 @@ const StyledBox = styled(Box)`
     @media (max-width: 600px) {
         flex-direction: column-reverse;
         width: 100%;
-        gap: ${({theme}) => theme.spacing(1) };
+        gap: ${({theme}) => theme.spacing(1)};
     }
 `
 
-type PokemonApiResponse = { count: number, next: string, previous: string | null, results: PokemonApiResults }
-type PokemonApiResults = { name: string, url: string }[]
-type PokemonData = { url: string, data?: unknown }
-type PokemonCache = Record<string, PokemonData>
+// type PokemonApiResponse = { count: number, next: string, previous: string | null, results: PokemonApiResults }
+// type PokemonApiResults = { name: string, url: string }[]
+// type PokemonData = { url: string, data?: unknown }
+// type PokemonCache = Record<string, PokemonData>
 
 export default function App() {
+    const dispatch = useDispatch()
     const [tabIndex, setTabIndex] = useState(0)
-    const [pokemonCount, setPokemonCount] = useState(5)
-    const [formCache, setFormCache] = useState<PokemonCache>({})
+    // const [pokemonCount, setPokemonCount] = useState(5)
+    // const [formCache, setFormCache] = useState<PokemonCache>({})
+
+
+    // @ts-ignore
+    const formCache = useSelector(({pokemons}: PokemonState) => pokemons.pokemons)
+    const selectedPokemon = Object.keys(formCache)[tabIndex]
 
     useEffect(() => {
-        (async () => {
-            const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonCount}`)
-            const {results}: Awaited<PokemonApiResponse> = await pokemonData.json()
-            const formCache = results.reduce((acc, {name, url}) => {
-                return ({...acc, [name]: {url}})
-            }, {} as PokemonCache)
-            setFormCache(formCache)
-            if (pokemonCount > 5) {
-                setTabIndex(pokemonCount - 1)
-            }
-        })()
-    }, [pokemonCount])
+        dispatch(fetchPokemons())
+        // (async () => {
+        //     await new Promise(resolve => setTimeout(resolve, 2000));
+        //     const pokemonData = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonCount}`)
+        //     const {results}: Awaited<PokemonApiResponse> = await pokemonData.json()
+        //     const formCache = results.reduce((acc, {name, url}) => {
+        //         return ({...acc, [name]: {url}})
+        //     }, {} as PokemonCache)
+        //     setFormCache(formCache)
+        //     if (pokemonCount > 5) {
+        //         setTabIndex(pokemonCount - 1)
+        //     }
+        // })()
+    }, [dispatch])
 
-    const selectedPokemon = Object.keys(formCache)[tabIndex]
     return (
         <Container>
             <Branding/>
-            <StyledBox>
-                <Tabs
-                    role="navigation"
-                    orientation="vertical"
-                    variant="scrollable"
-                    visibleScrollbar
-                    value={tabIndex}
-                    onChange={(_, newValue) => setTabIndex(newValue)}
-                    aria-label="Pokemon Forms"
-                >
-                    {Object.keys(formCache).map((label, index) => (
-                        <Tab key={`pokemon-${index}`} label={label}/>
-                    ))}
-                </Tabs>
-                {selectedPokemon && (
-                    <PokemonForm
-                        key={`form-${selectedPokemon}`}
-                        name={selectedPokemon}
-                        url={formCache[selectedPokemon].url}
-                    />
-                )}
-                <Fab color="primary" aria-label="add" size="medium" sx={{position: "absolute", bottom: 33, right: 33}}>
-                    <IconButton sx={{color: "white"}} onClick={() => setPokemonCount(prevState => prevState + 1)}>
-                        <AddRoundedIcon/>
-                    </IconButton>
-                </Fab>
-            </StyledBox>
+            {!selectedPokemon
+                ? (<h1>loading</h1>)
+                : (<StyledBox>
+                    <Tabs
+                        role="navigation"
+                        orientation="vertical"
+                        variant="scrollable"
+                        visibleScrollbar
+                        value={tabIndex}
+                        onChange={(_, newValue) => setTabIndex(newValue)}
+                        aria-label="Pokemon Forms"
+                    >
+                        {Object.keys(formCache).map((label, index) => (
+                            <Tab key={`pokemon-${index}`} label={label}/>
+                        ))}
+                    </Tabs>
+                    {selectedPokemon && (
+                        <PokemonForm
+                            key={`form-${selectedPokemon}`}
+                            name={selectedPokemon}
+                            url={formCache[selectedPokemon].url}
+                        />
+                    )}
+                    <Fab color="primary" aria-label="add" size="medium"
+                         sx={{position: "absolute", bottom: 33, right: 33}}>
+                        <IconButton sx={{color: "white"}}
+                                    onClick={() => console.log("setPokemonCount(prevState => prevState + 1)")}>
+                            <AddRoundedIcon/>
+                        </IconButton>
+                    </Fab>
+                </StyledBox>)}
         </Container>
     );
 }

@@ -14,6 +14,7 @@ import {Tab, Tabs} from "@mui/material";
 import SelectedPokemon from "./components/SelectedPokemon.tsx";
 import AddPokemon from "./components/Fab/AddPokemon.tsx";
 import Loader from "./components/Loader.tsx";
+
 export default function App() {
     const dispatch = useDispatch()
     const loading = useSelector(isLoading)
@@ -25,14 +26,22 @@ export default function App() {
         dispatch(fetchPokemonsStart(5))
     }, [dispatch])
 
-    const onTabChange = (_: SyntheticEvent<Element, Event>, newValue: number) => {
-        dispatch(setTabIndex(newValue))
-        dispatch(setSelectedPokemon(pokemons[newValue]))
+    useEffect(() => {
+        if (pokemons.length > 0) {
+            dispatch(setTabIndex(pokemons.length - 1))
+        }
+    }, [pokemons, dispatch])
+
+    const onTabChange = (_: SyntheticEvent<Element, Event>, index: number) => {
+        dispatch(setTabIndex(index))
+        dispatch(setSelectedPokemon(pokemons[index]))
     }
 
     const onAddPokemon = () => {
         dispatch(setTabIndex(pokemons.length - 1))
         dispatch(fetchPokemonsStart(pokemons.length + 1))
+        const pokemonCount = useSelector(getPokemons).length
+        dispatch(setTabIndex(pokemonCount))
     }
 
     return (

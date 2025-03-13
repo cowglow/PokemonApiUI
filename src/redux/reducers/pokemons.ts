@@ -1,5 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
 import {Pokemon} from "../../types/pokemon.ts";
+import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../store-config.ts";
 
 export type PokemonState = {
@@ -12,16 +12,16 @@ const initialState: PokemonState = {
     items: [],
     loading: false,
     error: null,
-    selectedPokemon: null
+    selectedPokemon: null,
 }
 
 const pokemonSlice = createSlice({
     name: "pokemons",
     initialState,
     reducers: {
-        fetchPokemonsStart: (state) => ({
+        fetchPokemonsStart: (state, _action) => ({
             ...state,
-            loading: true
+            loading: true,
         }),
         fetchPokemonsSuccess: (state, action) => ({
             ...state,
@@ -56,6 +56,6 @@ export const {
     fetchPokemonsStart,
     fetchPokemonsSuccess,
     fetchPokemonsFailure,
-    setSelectedPokemon
+    setSelectedPokemon,
 } = pokemonSlice.actions
 export default pokemonSlice.reducer

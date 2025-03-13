@@ -1,7 +1,3 @@
-import {Fab, IconButton, Tab, Tabs} from "@mui/material";
-import {SyntheticEvent, useEffect} from "react";
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import Branding from "./components/Branding.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchPokemonsStart,
@@ -11,10 +7,13 @@ import {
     setSelectedPokemon
 } from "./redux/reducers/pokemons.ts";
 import {getTabIndex, setTabIndex} from "./redux/reducers/tab.ts";
+import {SyntheticEvent, useEffect} from "react";
 import {Container, StyledBox} from "./App.Styled.ts";
-import Loader from "./components/Loader.tsx";
+import Branding from "./components/Branding.tsx";
+import {Tab, Tabs} from "@mui/material";
 import SelectedPokemon from "./components/SelectedPokemon.tsx";
-
+import AddPokemon from "./components/Fab/AddPokemon.tsx";
+import Loader from "./components/Loader.tsx";
 export default function App() {
     const dispatch = useDispatch()
     const loading = useSelector(isLoading)
@@ -23,12 +22,16 @@ export default function App() {
     const tabIndex = useSelector(getTabIndex)
 
     useEffect(() => {
-        dispatch(fetchPokemonsStart())
+        dispatch(fetchPokemonsStart(5))
     }, [dispatch])
 
     const onTabChange = (_: SyntheticEvent<Element, Event>, newValue: number) => {
         dispatch(setTabIndex(newValue))
         dispatch(setSelectedPokemon(pokemons[newValue]))
+    }
+
+    const onAddPokemon = () => {
+        dispatch(fetchPokemonsStart(pokemons.length + 1))
     }
 
     return (
@@ -50,13 +53,7 @@ export default function App() {
                 </Tabs>
                 <SelectedPokemon pokemon={selectedPokemon}/>
             </StyledBox>
-            <Fab color="primary" aria-label="add" size="medium"
-                 sx={{position: "absolute", bottom: 33, right: 33}}>
-                <IconButton sx={{color: "white"}}
-                            onClick={() => console.log("setPokemonCount(prevState => prevState + 1)")}>
-                    <AddRoundedIcon/>
-                </IconButton>
-            </Fab>
+            <AddPokemon onClick={onAddPokemon}/>
             <Loader loading={loading}/>
         </Container>
     );

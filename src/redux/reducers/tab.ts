@@ -5,7 +5,7 @@ export type TabState = {
     tabIndex: number,
 }
 const initialState: TabState = {
-    tabIndex: 0,
+    tabIndex: -1,
 }
 
 const tabSlice = createSlice({

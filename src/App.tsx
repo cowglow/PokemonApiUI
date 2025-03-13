@@ -31,6 +31,7 @@ export default function App() {
     }
 
     const onAddPokemon = () => {
+        dispatch(setTabIndex(pokemons.length - 1))
         dispatch(fetchPokemonsStart(pokemons.length + 1))
     }
 

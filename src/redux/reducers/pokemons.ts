@@ -1,39 +1,61 @@
-import {FETCH_POKEMONS_FAILURE, FETCH_POKEMONS_START, FETCH_POKEMONS_SUCCESS} from "../action-types.ts";
-import {Pokemon, PokemonApiResponse} from "../../types/pokemon.ts";
+import {createSlice} from "@reduxjs/toolkit";
+import {Pokemon} from "../../types/pokemon.ts";
+import {RootState} from "../store-config.ts";
 
 export type PokemonState = {
-    pokemons: PokemonApiResponse[],
+    items: Pokemon[],
     loading: boolean,
     error: unknown,
+    selectedPokemon: Pokemon | null
 }
 const initialState: PokemonState = {
-    pokemons: [],
+    items: [],
     loading: false,
     error: null,
+    selectedPokemon: null
 }
 
-export function pokemonReducers(
-    state = initialState,
-    action: { type: string, payload: any }
-) {
-    switch (action.type) {
-        case FETCH_POKEMONS_START:
-            return {...state, loading: true}
-        case FETCH_POKEMONS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                pokemons: action.payload.reduce((acc: {}, {name, url}: Pokemon) => {
-                    return ({...acc, [name]: {url}})
-                }, {} as Pokemon)
-            }
-        case FETCH_POKEMONS_FAILURE:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload,
-            }
-        default:
-            return state
+const pokemonSlice = createSlice({
+    name: "pokemons",
+    initialState,
+    reducers: {
+        fetchPokemonsStart: (state) => ({
+            ...state,
+            loading: true
+        }),
+        fetchPokemonsSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            items: action.payload
+        }),
+        fetchPokemonsFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload
+        }),
+        setSelectedPokemon: (state, action) => ({
+            ...state,
+            selectedPokemon: action.payload
+        })
     }
+})
+
+export function isLoading(state: RootState) {
+    return state.pokemons.loading
 }
+
+export function getPokemons(state: RootState) {
+    return state.pokemons.items
+}
+
+export function getSelectedPokemon(state: RootState) {
+    return state.pokemons.selectedPokemon
+}
+
+export const {
+    fetchPokemonsStart,
+    fetchPokemonsSuccess,
+    fetchPokemonsFailure,
+    setSelectedPokemon
+} = pokemonSlice.actions
+export default pokemonSlice.reducer

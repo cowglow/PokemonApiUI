@@ -1,11 +1,11 @@
 import {call, put} from 'redux-saga/effects'
-import {fetchPokemonsFailure, fetchPokemonsSuccess} from "../actions/fetch-pokemons.ts";
 import {requestPokemons} from "../saga-requests/request-pokemons.ts";
+import {PokemonApiResponse} from "../../types/pokemon.ts";
+import {fetchPokemonsFailure, fetchPokemonsSuccess} from "../reducers/pokemons.ts";
 
 export function* fetchPokemonsHandler() {
     try {
-        // @ts-ignore
-        const response = yield call(requestPokemons);
+        const response: PokemonApiResponse = yield call(requestPokemons);
         yield put(fetchPokemonsSuccess(response.results))
     } catch (error) {
         yield put(fetchPokemonsFailure(error));

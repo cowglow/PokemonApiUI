@@ -4,7 +4,6 @@ import {StyledForm, StyledTextInput} from "./RHF/FormComponet.Styled.ts";
 import createPokemon from "../lib/create-pokemon.ts";
 import {Pokemon} from "../lib/PokemonType.ts";
 
-
 const StyledPokemonForm = styled(StyledForm)`
     width: 100%;
     display: flex;
@@ -22,7 +21,7 @@ type PokemonFormProps = {
     name: string
     url: string
 }
-export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
+export default function PokemonForm({name: pokemonName, url}: PokemonFormProps) {
     const editableFields = ["name", "height", "weight", "base_experience"] as const
     const randomDelay = Math.floor(Math.random() * (1200 - 800 + 1)) + 800;
     const methods = useForm<PokemonFormSchema>({
@@ -39,7 +38,7 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
             <StyledPokemonForm>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Typography variant="h4" component="h1">
-                        {capitalize(pokemon)}
+                        {capitalize(pokemonName)}
                     </Typography>
                     {methods.formState.isLoading
                         ? <Skeleton
@@ -51,7 +50,6 @@ export default function PokemonForm({name: pokemon, url}: PokemonFormProps) {
                 </Box>
                 {editableFields.map((key: FieldName<PokemonFormSchema>) => {
                     const fieldName = key as FieldName<PokemonFormSchema>
-                    // @ts-ignore
                     return methods.formState.isLoading
                         ? <Skeleton
                             width="100%"

@@ -15,10 +15,9 @@ export const Container = styled(Paper)`
 
 export const StyledBox = styled(Box)`
     display: flex;
-    width: 800px;
-    height: calc(100% - 78px);
-    margin: 0 auto;
+    height: 100%;
     @media (max-width: 600px) {
+        display: block;
         flex-direction: column-reverse;
         width: 100%;
         gap: ${({theme}) => theme.spacing(1)};

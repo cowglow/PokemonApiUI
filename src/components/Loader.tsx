@@ -6,6 +6,6 @@ interface LoaderProps {
 
 export default function Loader({loading}: LoaderProps) {
     return (
-        <Backdrop open={loading}><CircularProgress/></Backdrop>
+        <Backdrop open={loading} sx={{position: "absolute"}}><CircularProgress/></Backdrop>
     )
 }

@@ -1,5 +1,4 @@
-import {LinearProgress, Tab, Tabs, useMediaQuery, useTheme} from "@mui/material";
-import {setTabIndex} from "../redux/reducers/tab.ts";
+import {Box, Tab, Tabs, useMediaQuery, useTheme} from "@mui/material";
 import {SyntheticEvent} from "react";
 import {
     getPokemonNames,
@@ -9,6 +8,7 @@ import {
     setSelectedPokemon
 } from "../redux/reducers/pokemons.ts";
 import {useDispatch, useSelector} from "react-redux";
+import Loader from "./Loader.tsx";
 
 export default function PokemonTabs() {
     const dispatch = useDispatch()
@@ -18,17 +18,14 @@ export default function PokemonTabs() {
     const selectedTab = useSelector(getSelectedPokemonIndex)
 
     const onTabChange = (_: SyntheticEvent<Element, Event>, index: number) => {
-        dispatch(setTabIndex(index))
         dispatch(setSelectedPokemon(pokemons[index]))
     }
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-    if (loading) return <LinearProgress/>
-
     return (
-        <>
+        <Box sx={{minWidth: 120}}>
             <Tabs
                 role="navigation"
                 orientation={isMobile ? "horizontal" : "vertical"}
@@ -43,6 +40,7 @@ export default function PokemonTabs() {
                     <Tab key={`pokemon-${index}`} label={label}/>
                 ))}
             </Tabs>
-        </>
+            {loading && <Loader loading={loading} isMobile={isMobile}/>}
+        </Box>
     );
 }

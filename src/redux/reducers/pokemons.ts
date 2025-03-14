@@ -48,8 +48,18 @@ export function getPokemons(state: RootState) {
     return state.pokemons.items
 }
 
+export function getPokemonNames(state: RootState) {
+    return state.pokemons.items.map(({name}) => name)
+}
+
 export function getSelectedPokemon(state: RootState) {
     return state.pokemons.selectedPokemon
+}
+
+export function getSelectedPokemonIndex(state: RootState) {
+    if (!state.pokemons.selectedPokemon) return -1
+    const pokemonNames = getPokemonNames(state)
+    return pokemonNames.indexOf(state.pokemons.selectedPokemon.name)
 }
 
 export const {

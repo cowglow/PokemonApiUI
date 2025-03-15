@@ -3,7 +3,7 @@ import Branding from "../components/Branding.tsx";
 
 export default function Header() {
     return (
-        <AppBar position="fixed">
+        <AppBar position="static">
             <Toolbar>
                 <Branding/>
             </Toolbar>

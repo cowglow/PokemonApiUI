@@ -1,16 +1,15 @@
-import {Fab, IconButton} from "@mui/material";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import {Fab} from "@mui/material";
 
 interface AddPokemonProps {
     onClick: () => void
 }
-export default function AddPokemon({onClick}:AddPokemonProps){
+
+export default function AddPokemon({onClick}: AddPokemonProps) {
     return (
-        <Fab color="primary" aria-label="add" size="medium"
+        <Fab color="primary" aria-label="add" size="medium" onClick={onClick}
              sx={{position: "absolute", bottom: 33, right: 33}}>
-            <IconButton sx={{color: "white"}} onClick={onClick}>
-                <AddRoundedIcon/>
-            </IconButton>
+            <AddRoundedIcon/>
         </Fab>
     )
 }

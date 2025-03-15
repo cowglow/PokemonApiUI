@@ -3,9 +3,10 @@ import {fetchPokemonsStart, getPokemons, getSelectedPokemon} from "./redux/reduc
 import {useEffect} from "react";
 import SelectedPokemon from "./components/SelectedPokemon.tsx";
 import AddPokemon from "./components/Fab/AddPokemon.tsx";
-import PokemonTabs from "./components/PokemonTabs.tsx";
+// import PokemonTabs from "./components/PokemonTabs.tsx";
 import Layout from "./ui/Layout.tsx";
-import {Box} from "@mui/material";
+import {ContentWrapper} from "./App.Styled.ts";
+import PokemonList from "./components/PokemonList.tsx";
 
 export default function App() {
     const dispatch = useDispatch()
@@ -13,7 +14,7 @@ export default function App() {
     const selectedPokemon = useSelector(getSelectedPokemon)
 
     useEffect(() => {
-        dispatch(fetchPokemonsStart(5))
+        dispatch(fetchPokemonsStart(13))
     }, [dispatch])
 
 
@@ -23,11 +24,12 @@ export default function App() {
 
     return (
         <Layout>
-            <Box display="flex">
-                <PokemonTabs/>
+            <ContentWrapper>
+                <PokemonList/>
+                {/*<PokemonTabs/>*/}
                 <SelectedPokemon pokemon={selectedPokemon}/>
                 <AddPokemon onClick={onAddPokemon}/>
-            </Box>
+            </ContentWrapper>
         </Layout>
     );
 }

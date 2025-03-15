@@ -3,13 +3,11 @@ import Header from "./Header.tsx";
 import Footer from "./Footer.tsx";
 import {LayoutWrapper} from "../App.Styled.ts";
 
-
 export default function Layout({children}: PropsWithChildren) {
     return (
         <LayoutWrapper>
             <header>
                 <Header/>
-                <br/><br/><br/><br/>
             </header>
             <main>
                 {children}

@@ -52,12 +52,14 @@ export default function PokemonForm({name: pokemonName, url}: PokemonFormProps) 
                     const fieldName = key as FieldName<PokemonFormSchema>
                     return methods.formState.isLoading
                         ? <Skeleton
+                            key={key}
                             width="100%"
                             height={56}
                         />
                         : <StyledTextInput
                             key={key}
                             label={capitalize(key)}
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             {...methods.register(fieldName)}
 

@@ -11,7 +11,7 @@ export default function Branding() {
     return (
         <BrandingWrapper>
             <img src={viteLogo} width={50} height={50} className="logo" alt="Vite logo"/>
-            <Typography variant="h5" component="h1">Pokémon(PokéApi)</Typography>
+            <Typography variant="h5" component="h1">Poké(en)Api(UI)</Typography>
         </BrandingWrapper>
     )
 }

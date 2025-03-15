@@ -4,6 +4,6 @@ import checker from "vite-plugin-checker";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base:"/PokemonApiUI",
+  base:"/pokemon-api-ui",
   plugins: [react(), checker({typescript:true})],
 })

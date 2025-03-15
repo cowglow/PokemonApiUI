@@ -14,12 +14,12 @@ export default function App() {
     const selectedPokemon = useSelector(getSelectedPokemon)
 
     useEffect(() => {
-        dispatch(fetchPokemonsStart(13))
+        dispatch(fetchPokemonsStart(20))
     }, [dispatch])
 
 
     const onAddPokemon = () => {
-        dispatch(fetchPokemonsStart(pokemons.length + 1))
+        dispatch(fetchPokemonsStart(pokemons.length + 20))
     }
 
     return (
